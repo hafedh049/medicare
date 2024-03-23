@@ -2,6 +2,7 @@ import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medicare/utils/shared.dart';
+import 'package:medicare/views/report.dart';
 import 'package:medicare/views/work_accident.dart';
 
 class Home extends StatefulWidget {
@@ -38,7 +39,7 @@ class _HomeState extends State<Home> {
                 splashColor: transparentColor,
                 highlightColor: transparentColor,
                 hoverColor: transparentColor,
-                onTap: () {},
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const Report())),
                 child: AnimatedLoadingBorder(
                   child: Container(
                     padding: const EdgeInsets.all(8),
