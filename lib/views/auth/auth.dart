@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:lottie/lottie.dart';
 import 'package:medicare/views/home.dart';
-
-import '../../utils/shared.dart';
 
 class FingerPrint extends StatefulWidget {
   const FingerPrint({super.key});
@@ -21,7 +18,6 @@ class _FingerPrintState extends State<FingerPrint> {
     if (canAuthenticate) {
       final List<BiometricType> availableBiometrics = await auth.getAvailableBiometrics();
       if (availableBiometrics.isNotEmpty) {
-        print(availableBiometrics);
         auth.authenticate(localizedReason: "localizedReason").then(
           (bool value) {
             if (value) {
@@ -29,7 +25,6 @@ class _FingerPrintState extends State<FingerPrint> {
             }
           },
         );
-        // Some biometrics are enrolled.
       }
     }
   }
@@ -41,9 +36,8 @@ class _FingerPrintState extends State<FingerPrint> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Biometrics", style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-            const SizedBox(height: 20),
-            GestureDetector(onTap: _onPressed, child: LottieBuilder.asset("assets/lotties/fingerprint.json", fit: BoxFit.contain)),
+            LottieBuilder.asset("assets/lotties/welcome.json", fit: BoxFit.contain, reverse: true),
+            GestureDetector(onTap: _onPressed, child: LottieBuilder.asset("assets/lotties/fingerprint.json", width: 100, height: 100, reverse: true)),
           ],
         ),
       ),
