@@ -13,9 +13,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final List<Map<String, dynamic>> _buttons = <Map<String, dynamic>>[
+    <String, dynamic>{
+      "title": "Accident de travail",
+      "widget": const WorkAccident(),
+    },
+    <String, dynamic>{
+      "title": "Réclamation",
+      "widget": const Report(),
+    },
+    <String, dynamic>{
+      "title": "Prise du Rendez-Vous",
+      "widget": Container(),
+    },
+    <String, dynamic>{
+      "title": "AES",
+      "widget": Container(),
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldColor,
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Center(
@@ -23,54 +42,23 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              InkWell(
-                splashColor: transparentColor,
-                highlightColor: transparentColor,
-                hoverColor: transparentColor,
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const WorkAccident())),
-                child: AnimatedLoadingBorder(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    child: Text("Accident de travail", style: GoogleFonts.itim(fontSize: 35, fontWeight: FontWeight.w500, color: blueColor)),
+              for (final Map<String, dynamic> item in _buttons) ...<Widget>[
+                InkWell(
+                  splashColor: transparentColor,
+                  highlightColor: transparentColor,
+                  hoverColor: transparentColor,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => item["widget"])),
+                  child: AnimatedLoadingBorder(
+                    borderColor: blueColor,
+                    child: Container(
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: darkColor),
+                      padding: const EdgeInsets.all(8),
+                      child: Text(item["title"], style: GoogleFonts.itim(fontSize: 35, fontWeight: FontWeight.w500, color: blueColor)),
+                    ),
                   ),
                 ),
-              ),
-              InkWell(
-                splashColor: transparentColor,
-                highlightColor: transparentColor,
-                hoverColor: transparentColor,
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const Report())),
-                child: AnimatedLoadingBorder(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    child: Text("Réclamation", style: GoogleFonts.itim(fontSize: 35, fontWeight: FontWeight.w500, color: blueColor)),
-                  ),
-                ),
-              ),
-              InkWell(
-                splashColor: transparentColor,
-                highlightColor: transparentColor,
-                hoverColor: transparentColor,
-                onTap: () {},
-                child: AnimatedLoadingBorder(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    child: Text("Prise du Rendez-Vous", style: GoogleFonts.itim(fontSize: 35, fontWeight: FontWeight.w500, color: blueColor)),
-                  ),
-                ),
-              ),
-              InkWell(
-                splashColor: transparentColor,
-                highlightColor: transparentColor,
-                hoverColor: transparentColor,
-                onTap: () {},
-                child: AnimatedLoadingBorder(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    child: Text("AES", style: GoogleFonts.itim(fontSize: 35, fontWeight: FontWeight.w500, color: blueColor)),
-                  ),
-                ),
-              ),
+                const SizedBox(height: 20),
+              ],
             ],
           ),
         ),

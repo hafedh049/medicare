@@ -23,6 +23,7 @@ class _RendezVousState extends State<RendezVous> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldColor,
       body: Column(
         children: <Widget>[
           Text("Reclamation", style: GoogleFonts.itim(fontSize: 35, fontWeight: FontWeight.w500, color: blueColor)),

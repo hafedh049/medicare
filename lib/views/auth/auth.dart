@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:lottie/lottie.dart';
+import 'package:medicare/utils/shared.dart';
 import 'package:medicare/views/home.dart';
 
 class FingerPrint extends StatefulWidget {
@@ -32,6 +33,7 @@ class _FingerPrintState extends State<FingerPrint> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldColor,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

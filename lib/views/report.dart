@@ -20,13 +20,12 @@ class _ReportState extends State<Report> {
 
   String _videoPath = "";
 
-  String _twoDigits(n) => n.toString().padLeft(2, '0');
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: scaffoldColor,
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: SingleChildScrollView(
