@@ -8,8 +8,9 @@ import 'package:lottie/lottie.dart';
 import 'package:medicare/utils/shared.dart';
 
 class CapturedPictures extends StatefulWidget {
-  const CapturedPictures({super.key, required this.capturedPictures});
+  const CapturedPictures({super.key, required this.capturedPictures, required this.callback});
   final List<String> capturedPictures;
+  final void Function() callback;
   @override
   State<CapturedPictures> createState() => _CapturedPicturesState();
 }
@@ -54,59 +55,60 @@ class _CapturedPicturesState extends State<CapturedPictures> {
             Expanded(
               child: _images.isEmpty
                   ? Center(child: LottieBuilder.asset("assets/lotties/empty.json"))
-                  : Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      alignment: WrapAlignment.start,
-                      runAlignment: WrapAlignment.start,
-                      spacing: 20,
-                      runSpacing: 20,
-                      children: <Widget>[
-                        for (Map<String, dynamic> image in _images)
-                          StatefulBuilder(
-                            builder: (BuildContext context, void Function(void Function()) _) {
-                              return InkWell(
-                                splashColor: transparentColor,
-                                highlightColor: transparentColor,
-                                hoverColor: transparentColor,
-                                onTap: () => showModalBottomSheet(
-                                  backgroundColor: scaffoldColor,
-                                  context: context,
-                                  builder: (BuildContext context) => Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      image: DecorationImage(image: FileImage(File(image["path"])), fit: BoxFit.cover),
+                  : SingleChildScrollView(
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        alignment: WrapAlignment.start,
+                        runAlignment: WrapAlignment.start,
+                        spacing: 20,
+                        runSpacing: 20,
+                        children: <Widget>[
+                          for (Map<String, dynamic> image in _images)
+                            StatefulBuilder(
+                              builder: (BuildContext context, void Function(void Function()) _) {
+                                return InkWell(
+                                  splashColor: transparentColor,
+                                  highlightColor: transparentColor,
+                                  hoverColor: transparentColor,
+                                  onTap: () => showModalBottomSheet(
+                                    backgroundColor: scaffoldColor,
+                                    context: context,
+                                    builder: (BuildContext context) => Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25),
+                                        image: DecorationImage(image: FileImage(File(image["path"])), fit: BoxFit.cover),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                child: Container(
-                                  width: width,
-                                  height: width,
-                                  alignment: Alignment.topRight,
-                                  padding: const EdgeInsets.all(1),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: blueColor, width: 2),
-                                    image: DecorationImage(image: FileImage(File(image["path"])), fit: BoxFit.cover),
+                                  child: Container(
+                                    width: width,
+                                    height: width,
+                                    alignment: Alignment.topRight,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: blueColor, width: 2),
+                                      image: DecorationImage(image: FileImage(File(image["path"])), fit: BoxFit.cover),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Spacer(),
+                                        Checkbox(
+                                          fillColor: const MaterialStatePropertyAll(blueColor),
+                                          checkColor: whiteColor,
+                                          value: image["check"],
+                                          onChanged: (bool? value) {
+                                            _(() => image["check"] = value!);
+                                            _buttonKey.currentState!.setState(() {});
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Spacer(),
-                                      Checkbox(
-                                        fillColor: const MaterialStatePropertyAll(blueColor),
-                                        checkColor: whiteColor,
-                                        value: image["check"],
-                                        onChanged: (bool? value) {
-                                          _(() => image["check"] = value!);
-                                          _buttonKey.currentState!.setState(() {});
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                      ],
+                                );
+                              },
+                            ),
+                        ],
+                      ),
                     ),
             ),
             const SizedBox(height: 20),
@@ -130,6 +132,7 @@ class _CapturedPicturesState extends State<CapturedPictures> {
                             final List<String> tempo = _images.where((Map<String, dynamic> element) => element["check"]).map((e) => e["path"] as String).toList();
                             widget.capturedPictures.removeWhere((String element) => tempo.contains(element));
                             setState(() {});
+                            widget.callback();
                           },
                           child: Text("DELETE", style: GoogleFonts.itim(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w500)),
                         ),

@@ -119,7 +119,15 @@ class _WorkAccidentState extends State<WorkAccident> {
                 splashColor: transparentColor,
                 hoverColor: transparentColor,
                 highlightColor: transparentColor,
-                onLongPress: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => CapturedPictures(capturedPictures: _capturedPictures))),
+                onLongPress: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => CapturedPictures(
+                      capturedPictures: _capturedPictures,
+                      callback: () => _picturesKey.currentState!.setState(() {}),
+                    ),
+                  ),
+                ),
                 onTap: () async {
                   final List<XFile> images = await ImagePicker().pickMultiImage();
                   if (images.isNotEmpty) {

@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:medicare/views/reclamation_images.dart';
+import 'package:video_player/video_player.dart';
 
 import '../utils/shared.dart';
 
@@ -21,7 +23,10 @@ class _ReportState extends State<Report> {
 
   String _videoPath = "";
 
+  late VideoPlayerController _controller;
+
   final GlobalKey<State<StatefulWidget>> _picturesKey = GlobalKey<State<StatefulWidget>>();
+  final GlobalKey<State<StatefulWidget>> _displayImages = GlobalKey<State<StatefulWidget>>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +58,11 @@ class _ReportState extends State<Report> {
                             final File? croppedImage = await ImageCropper().cropImage(sourcePath: image.path);
                             if (croppedImage != null) {
                               _capturedPictures.add(croppedImage.path);
+                              _picturesKey.currentState!.setState(() {});
+                              _displayImages.currentState!.setState(() {});
                             }
                           }
                         }
-                        _picturesKey.currentState!.setState(() {});
                       },
                       child: Container(
                         padding: const EdgeInsets.all(16),
@@ -84,17 +90,19 @@ class _ReportState extends State<Report> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 10),
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Wrap(
-                          children: <Widget>[],
-                        ),
+                      child: StatefulBuilder(
+                        key: _displayImages,
+                        builder: (BuildContext context, void Function(void Function()) _) {
+                          return ReclamationImages(images: _capturedPictures, callback: () => _picturesKey.currentState!.setState(() {}));
+                        },
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Expanded(
                 child: StatefulBuilder(
                   builder: (BuildContext context, void Function(void Function()) _) {
@@ -106,21 +114,37 @@ class _ReportState extends State<Report> {
                         final XFile? video = await ImagePicker().pickVideo(source: ImageSource.camera, maxDuration: 1.minutes);
                         if (video != null) {
                           _videoPath = video.path;
+                          _controller = VideoPlayerController.file(File(_videoPath));
+                          await _controller.initialize();
                           _(() {});
                         }
                       },
                       child: Container(
                         height: 200,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: blueColor, width: 2),
-                        ),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(color: blueColor, width: 2)),
                         child: _videoPath.isNotEmpty
                             ? Stack(
                                 alignment: Alignment.topRight,
                                 children: <Widget>[
-                                  IconButton(onPressed: () {}, icon: const Icon(FontAwesome.x_solid, color: redColor, size: 15)),
+                                  VideoPlayer(_controller),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      IconButton(onPressed: () {}, icon: const Icon(FontAwesome.x_solid, color: redColor, size: 15)),
+                                      const Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Row(
+                                          children: <Widget>[
+                                            IconButton(onPressed: () async => await _controller.play(), icon: const Icon(FontAwesome.play_solid, color: whiteColor, size: 15)),
+                                            const Spacer(),
+                                            IconButton(onPressed: () async => await _controller.pause(), icon: const Icon(FontAwesome.pause_solid, color: blueColor, size: 15)),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ],
                               )
                             : Column(
