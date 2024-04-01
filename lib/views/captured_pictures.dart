@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -25,7 +24,6 @@ class _CapturedPicturesState extends State<CapturedPictures> {
       for (final String path in widget.capturedPictures)
         <String, dynamic>{
           "path": path,
-          "state": false,
           "check": false,
         },
     ];
@@ -70,7 +68,6 @@ class _CapturedPicturesState extends State<CapturedPictures> {
                                 splashColor: transparentColor,
                                 highlightColor: transparentColor,
                                 hoverColor: transparentColor,
-                                onLongPress: () => _(() => image["state"] = !image["state"]),
                                 onTap: () => showModalBottomSheet(
                                   backgroundColor: scaffoldColor,
                                   context: context,
@@ -91,22 +88,20 @@ class _CapturedPicturesState extends State<CapturedPictures> {
                                     border: Border.all(color: blueColor, width: 2),
                                     image: DecorationImage(image: FileImage(File(image["path"])), fit: BoxFit.cover),
                                   ),
-                                  child: !image["state"]
-                                      ? null
-                                      : Row(
-                                          children: <Widget>[
-                                            const Spacer(),
-                                            Checkbox(
-                                              fillColor: const MaterialStatePropertyAll(blueColor),
-                                              checkColor: whiteColor,
-                                              value: image["check"],
-                                              onChanged: (bool? value) {
-                                                _(() => image["check"] = value!);
-                                                _buttonKey.currentState!.setState(() {});
-                                              },
-                                            ),
-                                          ],
-                                        ),
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Spacer(),
+                                      Checkbox(
+                                        fillColor: const MaterialStatePropertyAll(blueColor),
+                                        checkColor: whiteColor,
+                                        value: image["check"],
+                                        onChanged: (bool? value) {
+                                          _(() => image["check"] = value!);
+                                          _buttonKey.currentState!.setState(() {});
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -130,7 +125,10 @@ class _CapturedPicturesState extends State<CapturedPictures> {
                           onPressed: () {
                             for (final Map<String, dynamic> image in _images.where((Map<String, dynamic> element) => element["check"])) {
                               widget.capturedPictures.remove(image["path"]);
+                              _images.removeWhere((element) => element["path"] == image["path"]);
                             }
+                            final List<String> tempo = _images.where((Map<String, dynamic> element) => element["check"]).map((e) => e["path"] as String).toList();
+                            widget.capturedPictures.removeWhere((String element) => tempo.contains(element));
                             setState(() {});
                           },
                           child: Text("DELETE", style: GoogleFonts.itim(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w500)),
@@ -142,7 +140,10 @@ class _CapturedPicturesState extends State<CapturedPictures> {
                 const Spacer(),
                 TextButton(
                   style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(greyColor.withOpacity(.8))),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    setState(() {});
+                  },
                   child: Text("CANCEL", style: GoogleFonts.itim(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w500)),
                 ),
               ],
