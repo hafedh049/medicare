@@ -11,14 +11,14 @@ import 'package:video_player/video_player.dart';
 
 import '../utils/shared.dart';
 
-class Report extends StatefulWidget {
-  const Report({super.key});
+class Reclamation extends StatefulWidget {
+  const Reclamation({super.key});
 
   @override
-  State<Report> createState() => _ReportState();
+  State<Reclamation> createState() => _ReclamationState();
 }
 
-class _ReportState extends State<Report> {
+class _ReclamationState extends State<Reclamation> {
   final List<String> _capturedPictures = <String>[];
 
   String _videoPath = "";
@@ -110,6 +110,7 @@ class _ReportState extends State<Report> {
                       splashColor: transparentColor,
                       hoverColor: transparentColor,
                       highlightColor: transparentColor,
+                      onLongPress: () => _(() => _videoPath = ""),
                       onTap: () async {
                         final XFile? video = await ImagePicker().pickVideo(source: ImageSource.camera, maxDuration: 1.minutes);
                         if (video != null) {
@@ -119,43 +120,45 @@ class _ReportState extends State<Report> {
                           _(() {});
                         }
                       },
-                      child: Container(
-                        height: 200,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(color: blueColor, width: 2)),
-                        child: _videoPath.isNotEmpty
-                            ? Stack(
-                                alignment: Alignment.topRight,
-                                children: <Widget>[
-                                  VideoPlayer(_controller),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      IconButton(onPressed: () {}, icon: const Icon(FontAwesome.x_solid, color: redColor, size: 15)),
-                                      const Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Row(
-                                          children: <Widget>[
-                                            IconButton(onPressed: () async => await _controller.play(), icon: const Icon(FontAwesome.play_solid, color: whiteColor, size: 15)),
-                                            const Spacer(),
-                                            IconButton(onPressed: () async => await _controller.pause(), icon: const Icon(FontAwesome.pause_solid, color: blueColor, size: 15)),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text("Select Video", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: blueColor)),
-                                  const SizedBox(height: 20),
-                                  const Icon(FontAwesome.plus_solid, color: blueColor, size: 35),
-                                ],
-                              ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          height: 200,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(border: Border.all(color: blueColor, width: 2)),
+                          child: _videoPath.isNotEmpty
+                              ? Stack(
+                                  alignment: Alignment.topRight,
+                                  children: <Widget>[
+                                    VideoPlayer(_controller),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        const Spacer(),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Row(
+                                            children: <Widget>[
+                                              IconButton(onPressed: () async => await _controller.play(), icon: const Icon(FontAwesome.play_solid, color: whiteColor, size: 15)),
+                                              const Spacer(),
+                                              IconButton(onPressed: () async => await _controller.pause(), icon: const Icon(FontAwesome.pause_solid, color: blueColor, size: 15)),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              : Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text("Select Video", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: blueColor)),
+                                    const SizedBox(height: 20),
+                                    const Icon(FontAwesome.plus_solid, color: blueColor, size: 35),
+                                  ],
+                                ),
+                        ),
                       ),
                     );
                   },

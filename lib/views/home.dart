@@ -2,7 +2,7 @@ import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medicare/utils/shared.dart';
-import 'package:medicare/views/report.dart';
+import 'package:medicare/views/reclamation.dart';
 import 'package:medicare/views/work_accident.dart';
 
 class Home extends StatefulWidget {
@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
     },
     <String, dynamic>{
       "title": "Réclamation",
-      "widget": const Report(),
+      "widget": const Reclamation(),
     },
     <String, dynamic>{
       "title": "Prise du Rendez-Vous",
