@@ -14,6 +14,9 @@ windows/
 android/
 lib/main.dart
 web/
+supera/web/
+administration/web/
+surveillant/web/
 lib/utils/callbacks.dart
 
 # dotenv environment variables file
