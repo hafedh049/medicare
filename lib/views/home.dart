@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medicare/utils/shared.dart';
 import 'package:medicare/views/reclamation.dart';
+import 'package:medicare/views/rendez_vous.dart';
 import 'package:medicare/views/work_accident.dart';
 
 class Home extends StatefulWidget {
@@ -24,7 +25,7 @@ class _HomeState extends State<Home> {
     },
     <String, dynamic>{
       "title": "Prise du Rendez-Vous",
-      "widget": Container(),
+      "widget": const RendezVous(),
     },
     <String, dynamic>{
       "title": "AES",
